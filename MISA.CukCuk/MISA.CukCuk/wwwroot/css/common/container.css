@@ -1,0 +1,32 @@
+﻿.container {
+    position: relative;
+    display: flex;
+    width: 100%;
+    height: calc(100vh - 55px);
+}
+
+/*Menu*/
+.menu {
+    width: 230px;
+    height: 100%;
+}
+
+
+/*content*/
+.content {
+    width: calc(100% - 230px);
+    height: calc(100% - 16px);
+    padding: 8px;
+}
+
+    .content .content-header {
+        height: 40px;
+    }
+
+    .content .content-body {
+        height: calc(100% - 40px);
+    }
+
+.flex-grow-1 {
+    flex-grow: 1;
+}

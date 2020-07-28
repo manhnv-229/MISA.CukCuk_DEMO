@@ -63,29 +63,27 @@
     width: 135px;
 }
 .dialog-body .row {
-    margin: 4px;
+    margin: 4px 0;
     display: flex;
     align-items: center;
 }
 
-
-.dialog .dialog-footer {
+.dialog-footer {
+    position: relative;
     display: flex;
-    padding: 8px;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 20px;
-    border: 1px solid #ccc;
-    background-color: aqua;
+    min-height: 30px;
 }
 
-.dialog .dialog-footer .footer-left{
-    position:absolute;
-    left:0;
-}
-
-    .dialog .dialog-footer .footer-right {
+    .dialog-footer .footer-right {
         position: absolute;
+        display: flex;
         right: 0;
+        bottom: 0;
+    }
+
+    .dialog-footer .footer-left {
+        position: absolute;
+        height: 100%;
+        display: flex;
+        left: 0;
     }

@@ -1,6 +1,10 @@
-﻿body {
+﻿@import "/css/common/icon.css";
+
+
+body {
     margin: 0px;
     font-size: 13px;
+    min-width: 1024px;
 }
 
 @font-face {
@@ -55,4 +59,12 @@
 
 n.label-required {
     color: #ff0000;
+}
+
+.margin-left-8{
+    margin-left:8px;
+}
+
+.margin-right-8{
+    margin-right:8px;
 }

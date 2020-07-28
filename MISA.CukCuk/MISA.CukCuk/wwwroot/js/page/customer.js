@@ -16,7 +16,7 @@ class CustomerJS {
         } catch (e) {
 
         }
-       
+
     }
 
     /**
@@ -24,16 +24,15 @@ class CustomerJS {
      * CreatedBy: NVMANH (23/07/2020)
      * */
     initEvent() {
-
         //$("#btnAdd").click(this.showDialog);
-        $("#btnAdd").on("click", 1, this.toolbarItemOnClick);
-        $("#btnEdit").on("click", 2, this.toolbarItemOnClick);
+        $("#btnAdd").on("click", Enum.FormMode.Add, this.toolbarItemOnClick);
+        $("#btnEdit").on("click", Enum.FormMode.Edit, this.toolbarItemOnClick);
         //$("#btnEdit").click(this.showDialog);
-        $("#btnClose").click(this.btnCloseOnClick);
+        $("#btnCancelDialog").click(this.btnCloseOnClick);
         $("#btnCloseHeader").click(this.btnCloseHeaderOnClick);
-        $("#btnSave").click(this.saveData.bind(this));
-        //$("tr").click(this.rowOnClick);
-        $("table").on("click", "tbody tr", 9999999, this.rowOnClick);
+        $("#btnSaveDetail").click(this.saveData.bind(this));
+        $("table").on("click", "tbody tr", this.rowOnClick);
+        $("table").on("dbclick", "tbody tr", this.rowOnDbClick);
     }
 
     ///**
@@ -53,18 +52,38 @@ class CustomerJS {
             var formMode = sender.data;
             switch (formMode) {
                 case Enum.FormMode.Add:
+                    $("#frmDialogDetail").show();
+                    $('#frmDialogDetai input')[0].focus();
                     break;
                 case Enum.FormMode.Edit:
-                    alert("Sửa dữ liệu");
+                    var rowSelected = $('tr.row-selected');
+                    if (rowSelected && rowSelected.length == 1) {
+                        var customerId = $('tr.row-selected').data('id');
+                        $.ajax({
+                            url: "/api/Customers/" + customerId,
+                            method: "GET",
+                            //data: {},
+                            dataType: "json",
+                            contentType: "application/json",
+                        }).done(function (res) {
+                            // Thực hiện binding dữ liệu lên form chi tiết:
+                            var customer = res;
+                            $('#txtCustomerCode').val(customer['CustomerCode']);
+                            $('#txtCustomerName').val(customer['CustomerName']);
+                        }).fail(function () {
+                            alert("Lỗi");
+                        });
+                        $("#frmDialogDetail").show();
+                        $('#frmDialogDetai input')[0].focus();
+                    }
                     break;
                 default:
             }
-            $("#frmDialogDetail").show();
-            $('#frmDialogDetai input')[0].focus();
+           
         } catch (e) {
 
         }
-       
+
     }
     /**
     * Sự kiện khi click button đóng dưới footer của Dialog
@@ -89,8 +108,17 @@ class CustomerJS {
     rowOnClick(sender) {
         this.classList.add("row-selected");
         $(this).siblings().removeClass("row-selected");
-       
+
     }
+
+    /**
+     * 
+     * */
+    //TODO: rowOnDbClick (đang làm dở)
+    rowOnDbClick(sender) {
+        $("#frmDialogDetail").show();
+    }
+
     /**
     * Load dữ liệu
     * CreatedBy: NVMANH (20/07/2020)
@@ -98,24 +126,38 @@ class CustomerJS {
     loadData() {
         try {
             $('table#tbListCustomer tbody').empty();
-            // Lấy dữ liệu về:
-            var data = fakeData;
-            // Đọc dữ liệu và gen dữ liệu từng khách hàng với HTML:
-            $.each(data, function (index, item) {
-                var customerInfoHTML = `<tr>
-                                <td>`+ item['CustomerCode'] + `</td>
-                                <td>`+ item['CustomerName'] + `</td>
-                                <td class="align-center">`+ commonJS.formatDate(item['Birthday']) + `</td>
-                                <td>`+ item['PhoneNumber'] + `</td>
-                                <td class="align-right">`+ commonJS.formatMoney(item['DebitAmount']) + `</td>
-                                <td class="align-center">`+ commonJS.buildCheckBoxByValue(item['Is5FoodMember']) + `</td>
-                            </tr>`;
-                $('table#tbListCustomer tbody').append(customerInfoHTML);
+            $.ajax({
+                url: "/api/Customers",
+                method: "GET",
+                //data: {},
+                dataType: "json",
+                contentType: "application/json",
+            }).done(function (response) {
+                if (response) {
+                    // Đọc dữ liệu và gen dữ liệu từng khách hàng với HTML:
+                    $.each(response, function (index, item) {
+                        var customerInfoHTML = $(`<tr class='grid-row'>
+                                <td class='grid-cell-inner'>`+ item['CustomerCode'] + `</td>
+                                <td class='grid-cell-inner'>`+ item['CustomerName'] + `</td>
+                                <td class="grid-cell-inner align-center">`+ (commonJS.formatDate(new Date(item['Birthday'])) || '') + `</td>
+                                <td class='grid-cell-inner'>`+ (item['PhoneNumber'] || '') + `</td>
+                                <td class="grid-cell-inner align-right">`+ (commonJS.formatMoney(item['DebitAmount']) || '') + `</td>
+                                <td class="grid-cell-inner align-center">`+ commonJS.buildCheckBoxByValue(item['Is5FoodMember']) + `</td>
+                            </tr>`);
+                        customerInfoHTML.data("id", item['CustomerID']);
+                        $('table#tbListCustomer tbody').append(customerInfoHTML);
+                    })
+                    // Mặc định chọn bản ghi đầu tiên có trong danh sách:
+                    $('table#tbListCustomer tbody tr').first().addClass('row-selected');
+                }
+            }).fail(function (response) {
+                alert("Có lỗi xảy ra vui lòng liên hệ MISA để được trợ giúp");
             })
+
         } catch (e) {
             console.log(e);
         }
-        
+
     }
 
     /**

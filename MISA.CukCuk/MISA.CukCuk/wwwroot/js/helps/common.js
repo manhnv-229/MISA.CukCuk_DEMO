@@ -7,7 +7,10 @@ var commonJS = {
     * CreatedBy: NVMANH (20/07/2020)
     */
     formatMoney(money) {
-        return money.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.');
+        if (money||money==0) {
+            return money.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.');
+        }
+        return null;
     },
 
     /**
@@ -16,7 +19,7 @@ var commonJS = {
     * CreatedBy: NVMANH (20/07/2020)
     */
     buildCheckBoxByValue(value) {
-        var checkBoxHTML = $(`<input type="checkbox" />`);
+        var checkBoxHTML = $(`<input type="checkbox" disabled/>`);
         if (value) {
             checkBoxHTML = checkBoxHTML.attr("checked", true);
         }
@@ -28,11 +31,14 @@ var commonJS = {
      * @param {any} date
      */
     formatDate(date) {
-        var day = date.getDate();
-        var month = date.getMonth() + 1;
-        var year = date.getFullYear();
-        month = (month < 10) ? "0" + month : month;
-        day = (day < 10) ? "0" + day : day;
-        return day + "/" + month + "/" + year;
+        if (date && !isNaN(date.getDate())) {
+            var day = date.getDate();
+            var month = date.getMonth() + 1;
+            var year = date.getFullYear();
+            month = (month < 10) ? "0" + month : month;
+            day = (day < 10) ? "0" + day : day;
+            return day + "/" + month + "/" + year;
+        }
+        return null;
     }
 }

@@ -69,7 +69,7 @@ namespace MISA.CukCuk.Model
         /// <summary>
         /// Số tiền nợ
         /// </summary>
-        public decimal DebitAmount { get; set; }
+        public decimal? DebitAmount { get; set; }
 
         /// <summary>
         /// Là thành viên 5Food (true- là thành viên, false- không phải là thành viên)

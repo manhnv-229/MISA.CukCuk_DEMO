@@ -13,6 +13,7 @@ class CustomerJS {
             var me = this;
             me.loadData();
             me.initEvent();
+            me.FormMode = null;
         } catch (e) {
 
         }
@@ -25,8 +26,9 @@ class CustomerJS {
      * */
     initEvent() {
         //$("#btnAdd").click(this.showDialog);
-        $("#btnAdd").on("click", Enum.FormMode.Add, this.toolbarItemOnClick);
-        $("#btnEdit").on("click", Enum.FormMode.Edit, this.toolbarItemOnClick);
+        $("#btnAdd").on("click", Enum.FormMode.Add, this.toolbarItemOnClick.bind(this));
+        $("#btnEdit").on("click", Enum.FormMode.Edit, this.toolbarItemOnClick.bind(this));
+        $("#btnDelete").on("click", Enum.FormMode.Delete, this.toolbarItemOnClick.bind(this));
         //$("#btnEdit").click(this.showDialog);
         $("#btnCancelDialog").click(this.btnCloseOnClick);
         $("#btnCloseHeader").click(this.btnCloseHeaderOnClick);
@@ -49,16 +51,23 @@ class CustomerJS {
 
     toolbarItemOnClick(sender) {
         try {
+            var me = this;
             var formMode = sender.data;
             switch (formMode) {
                 case Enum.FormMode.Add:
+                    this.FormMode = Enum.FormMode.Add;
                     $("#frmDialogDetail").show();
+                    // set giá trị mặc định cho các control nhập liệu"
+                    $("#frmDialogDetail input").val("");
+                    $("#frmDialogDetail input[type='checkbox']").prop("checked", false);
                     $('#frmDialogDetai input')[0].focus();
                     break;
                 case Enum.FormMode.Edit:
+                    this.FormMode = Enum.FormMode.Edit;
                     var rowSelected = $('tr.row-selected');
                     if (rowSelected && rowSelected.length == 1) {
                         var customerId = $('tr.row-selected').data('id');
+                        this.CustomerId = customerId;
                         $.ajax({
                             url: "/api/Customers/" + customerId,
                             method: "GET",
@@ -76,10 +85,24 @@ class CustomerJS {
                         $("#frmDialogDetail").show();
                         $('#frmDialogDetai input')[0].focus();
                     }
+                case Enum.FormMode.Delete:
+                    var rowSelected = $('tr.row-selected');
+                    if (rowSelected && rowSelected.length == 1) {
+                        var customerId = $('tr.row-selected').data('id');
+                        $.ajax({
+                            url: "/api/Customers/" + customerId,
+                            method: "DELETE",
+                        }).done(function (res) {
+                            // Thực hiện binding dữ liệu lên form chi tiết:
+                            me.loadData();
+                        }).fail(function () {
+                            alert("Lỗi");
+                        });
+                    }
                     break;
                 default:
             }
-           
+
         } catch (e) {
 
         }
@@ -166,12 +189,13 @@ class CustomerJS {
      * */
     saveData(sender, a, b, c) {
         debugger;
+        var me = this;
         // Lấy dữ liệu được nhập từ các input:
         var customerCode = $("#txtCustomerCode").val(),
             customerName = $("#txtCustomerName").val(),
-            bithday = $("#dtBirthday").val(),
+            bithday = $("#dtBirthday").val() || null,
             mobile = $("#txtMobile").val(),
-            debitAmount = $("#txtDebitAmount").val(),
+            debitAmount = $("#txtDebitAmount").val() || null,
             is5Food = $("#ckIs5FoodMember").is(":checked");
 
         // Từ các dữ liệu thu thập được thì build thành object khách hàng (customer)
@@ -183,14 +207,44 @@ class CustomerJS {
             DebitAmount: debitAmount,
             Is5FoodMember: is5Food
         };
-        // Lưu dữ liệu vào database:
-        fakeData.push(customer);
-        // Hiển thị thông báo cất thành công/ thất bại:
-        alert("Cất thành công!")
-        // Đóng/ ẩn Form:
-        $("#frmDialogDetail").hide();
-        // load lại dữ liệu
-        this.loadData();
+        if (me.FormMode == Enum.FormMode.Add) {
+            // Lưu dữ liệu vào database:
+            $.ajax({
+                url: "/api/Customers",
+                method: "POST",
+                data: JSON.stringify(customer),
+                dataType: "text",
+                contentType: "application/json"
+            }).done(function (res) {
+                // Hiển thị thông báo cất thành công/ thất bại:
+                alert("Cất thành công!")
+                // Đóng/ ẩn Form:
+                $("#frmDialogDetail").hide();
+                // load lại dữ liệu
+                me.loadData();
+            }).fail(function (res) {
+                debugger
+            });
+        } else if (me.FormMode == Enum.FormMode.Edit) {
+            // Lưu dữ liệu vào database:
+            $.ajax({
+                url: "/api/Customers/" + me.CustomerId,
+                method: "PUT",
+                data: JSON.stringify(customer),
+                dataType: "text",
+                contentType: "application/json"
+            }).done(function (res) {
+                // Hiển thị thông báo cất thành công/ thất bại:
+                alert("Cất thành công!")
+                // Đóng/ ẩn Form:
+                $("#frmDialogDetail").hide();
+                // load lại dữ liệu
+                me.loadData();
+            }).fail(function (res) {
+                debugger
+            });
+        }
+        
     }
 }
 

@@ -13,14 +13,23 @@ namespace MISA.CukCuk.Controllers
     [ApiController]
     public class CustomersController : ControllerBase
     {
-        // GET: api/<CustomersController>
+        /// <summary>
+        /// Lấy danh sách khách hàng
+        /// </summary>
+        /// <returns></returns>
+        /// CreatedBy: NVMANH (29/07/2020)
         [HttpGet]
         public IEnumerable<Customer> Get()
         {
             return Customer.ListCustomer;
         }
 
-        // GET api/<CustomersController>/5
+        /// <summary>
+        /// Lấy thông tin khách hàng theo id
+        /// </summary>
+        /// <param name="customerId">id của khách hàng</param>
+        /// <returns></returns>
+        /// CreatedBy: NVMANH (29/07/2020)
         [HttpGet("{customerId}")]
         public Customer Get(Guid customerId)
         {
@@ -28,22 +37,42 @@ namespace MISA.CukCuk.Controllers
             return customer;
         }
 
-        // POST api/<CustomersController>
+        /// <summary>
+        /// Thêm mới khách hàng vào CSDL
+        /// </summary>
+        /// <param name="customer">Khách hàng</param>
+        /// CreatedBy: NVMANH (29/07/2020)
         [HttpPost]
-        public void Post([FromBody] string value)
+        public void Post([FromBody] Customer customer)
         {
+            Customer.ListCustomer.Add(customer);
         }
 
-        // PUT api/<CustomersController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        /// <summary>
+        /// Sửa thông tin khách hàng
+        /// </summary>
+        /// <param name="customerId">id khách hàng</param>
+        /// <param name="customer">Thông tin mới của khách hàng</param>
+        /// CreatedBy: NVMANH (29/07/2020)
+        [HttpPut("{customerId}")]
+        public Customer Put(Guid customerId, [FromBody] Customer customer)
         {
+            customer.CustomerID = customerId;
+            var currentCustomer = Customer.ListCustomer.Where(c => c.CustomerID == customerId).FirstOrDefault();
+            Customer.ListCustomer.Remove(currentCustomer);
+            Customer.ListCustomer.Add(customer);
+            return customer;
         }
 
-        // DELETE api/<CustomersController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
+        /// <summary>
+        /// Thực hiện xóa dữ liệu
+        /// </summary>
+        /// <param name="customerId"></param>
+        [HttpDelete("{customerId}")]
+        public void Delete(Guid customerId)
         {
+            var currentCustomer = Customer.ListCustomer.Where(c => c.CustomerID == customerId).FirstOrDefault();
+            Customer.ListCustomer.Remove(currentCustomer);
         }
     }
 }

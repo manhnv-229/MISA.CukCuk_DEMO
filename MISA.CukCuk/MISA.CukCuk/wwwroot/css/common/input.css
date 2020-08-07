@@ -13,3 +13,7 @@ textarea.input-default{
     outline-offset: unset !important;
     outline: none !important;
 }
+
+input[type=date]{
+    text-align:center;
+}

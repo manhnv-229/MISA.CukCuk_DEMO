@@ -6,12 +6,16 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using MISA.CukCuk.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
+using Pomelo.EntityFrameworkCore.MySql.Infrastructure;
+using Pomelo.EntityFrameworkCore.MySql.Storage;
 
 namespace MISA.CukCuk
 {
@@ -27,6 +31,10 @@ namespace MISA.CukCuk
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDbContext<MISADemoContex>(options => options
+               .UseMySql("server=35.194.166.58;port=3306;user=nvmanh;password=12345678@Abc;database=MISADemo_NVMANH",
+                   mysqlOptions =>
+                       mysqlOptions.ServerVersion(new ServerVersion(new Version(10, 4, 6), ServerType.MariaDb))));
             services.AddControllers()
                 .AddNewtonsoftJson(options =>
             {

@@ -70,7 +70,7 @@ class EmployeeJS {
                         var customerId = $('tr.row-selected').data('id');
                         this.CustomerId = customerId;
                         $.ajax({
-                            url: "/api/Customers/" + customerId,
+                            url: "/api/v1/employees/" + customerId,
                             method: "GET",
                             //data: {},
                             dataType: "json",
@@ -91,7 +91,7 @@ class EmployeeJS {
                     if (rowSelected && rowSelected.length == 1) {
                         var customerId = $('tr.row-selected').data('id');
                         $.ajax({
-                            url: "/api/Customers/" + customerId,
+                            url: "/api/v1/employees/" + customerId,
                             method: "DELETE",
                         }).done(function (res) {
                             // Thực hiện binding dữ liệu lên form chi tiết:
@@ -151,7 +151,7 @@ class EmployeeJS {
         try {
             $('table#tbListCustomer tbody').empty();
             $.ajax({
-                url: "/api/Customers",
+                url: "/api/v1/employees",
                 method: "GET",
                 //data: {},
                 dataType: "json",
@@ -161,12 +161,16 @@ class EmployeeJS {
                     // Đọc dữ liệu và gen dữ liệu từng khách hàng với HTML:
                     $.each(response, function (index, item) {
                         var customerInfoHTML = $(`<tr class='grid-row'>
-                                <td class='grid-cell-inner'>`+ item['CustomerCode'] + `</td>
-                                <td class='grid-cell-inner'>`+ item['CustomerName'] + `</td>
-                                <td class="grid-cell-inner align-center">`+ (commonJS.formatDate(new Date(item['Birthday'])) || '') + `</td>
+                                <td class='grid-cell-inner'>`+ item['EmployeeCode'] + `</td>
+                                <td class='grid-cell-inner'>`+ item['FullName'] + `</td>
+                                <td class='grid-cell-inner'>`+ item['GenderName'] + `</td>
+                                <td class="grid-cell-inner align-center">`+ (commonJS.formatDate(new Date(item['DateOfBirth'])) || '') + `</td>
                                 <td class='grid-cell-inner'>`+ (item['PhoneNumber'] || '') + `</td>
-                                <td class="grid-cell-inner align-right">`+ (commonJS.formatMoney(item['DebitAmount']) || '') + `</td>
-                                <td class="grid-cell-inner align-center">`+ commonJS.buildCheckBoxByValue(item['Is5FoodMember']) + `</td>
+                                <td class='grid-cell-inner'>`+ (item['Email'] || '') + `</td>
+                                <td class='grid-cell-inner'>`+ (item['PositionName'] || '') + `</td>
+                                <td class='grid-cell-inner'>`+ (item['DepartmentName'] || '') + `</td>
+                                <td class="grid-cell-inner align-right">`+ (commonJS.formatMoney(item['Salary']) || '') + `</td>
+                                <td class='grid-cell-inner'>`+ (item['WorkStateName'] || '') + `</td>
                             </tr>`);
                         customerInfoHTML.data("id", item['CustomerID']);
                         $('table#tbListCustomer tbody').append(customerInfoHTML);
@@ -211,7 +215,7 @@ class EmployeeJS {
         if (me.FormMode == Enum.FormMode.Add) {
             // Lưu dữ liệu vào database:
             $.ajax({
-                url: "/api/Customers",
+                url: "/api/v1/employees",
                 method: "POST",
                 data: JSON.stringify(customer),
                 dataType: "text",
@@ -229,7 +233,7 @@ class EmployeeJS {
         } else if (me.FormMode == Enum.FormMode.Edit) {
             // Lưu dữ liệu vào database:
             $.ajax({
-                url: "/api/Customers/" + me.CustomerId,
+                url: "/api/v1/employees/" + me.CustomerId,
                 method: "PUT",
                 data: JSON.stringify(customer),
                 dataType: "text",

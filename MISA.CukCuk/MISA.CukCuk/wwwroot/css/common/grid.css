@@ -1,6 +1,6 @@
 ﻿.grid {
     width: 100%;
-    height: calc(100% - 28px);
+    height: calc(100% - 60px);
     border: 1px solid #d9d9d9;
     border-top: none;
     overflow:auto;

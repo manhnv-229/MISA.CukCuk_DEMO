@@ -1,5 +1,6 @@
 ﻿button {
     cursor: pointer;
+    background-color:transparent;
 }
 button:focus {
     outline: none;
@@ -11,7 +12,12 @@ button[disabled]{
 button[disabled] .btn-icon {
     opacity: .5;
 }
-
+.btn.disabled, .btn:disabled {
+    opacity: .65;
+}
+button:not(:disabled) {
+    cursor: pointer;
+}
 button .btn-icon {
     width: 16px;
     height: 16px;

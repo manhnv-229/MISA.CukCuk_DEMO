@@ -14,7 +14,6 @@ class EmployeeJS {
             me.loadData();
             me.initEvent();
             me.FormMode = null;
-            $("#frmDialogDetail").show();
         } catch (e) {
 
         }
@@ -150,8 +149,10 @@ class EmployeeJS {
     loadData() {
         try {
             $('table#tbListCustomer tbody').empty();
+            var skip = $('.toolbar-paging .page-info input').val();
+            var take = $('.toolbar-paging .triggerWrap .text-triggerWrap').text();
             $.ajax({
-                url: "/api/v1/employees",
+                url: "/api/v1/employees/paging?skip="+skip+"&take="+take,
                 method: "GET",
                 //data: {},
                 dataType: "json",

@@ -5,6 +5,7 @@
     border: 1px solid #ccc;
     padding: 2px;
     background: #ededed;
+    
 }
 
     .toolbar button {
@@ -24,7 +25,7 @@
         }
 
 
-   /* .toolbar .toolbar-item-icon {
+    /* .toolbar .toolbar-item-icon {
         display: block;
         width: 16px;
         height: 16px;
@@ -32,3 +33,103 @@
         background-image: url('/content/images/iconsprite.png');
         background-position: 0-2648px !important;
     }*/
+    .toolbar.toolbar-bottom {
+        position: relative;
+        bottom: 0px;
+        border-top: 0px;
+    }
+
+/*Toolbar paging*/
+.toolbar-paging {
+    background-color: #fff;
+    background-image: none;
+}
+
+    .toolbar-paging .page-info {
+        margin: 0 8px;
+    }
+
+        .toolbar-paging .page-info input {
+            margin: 0 8px;
+            height:23px;
+        }
+
+    .toolbar-paging .toolbar-paging-item {
+        padding: 3px;
+    }
+
+    .toolbar-paging .toolbar-separator-horizontal {
+        margin: 0 8px;
+    }
+
+    .toolbar-paging .toolbar-paging-item:not([disabled]):hover {
+        border: 1px solid #d8d8d8;
+        background-color: #ebebeb;
+        background-image: -webkit-gradient(linear,50% 0,50% 100%,color-stop(0%,#ededed),color-stop(50%,#ebebeb),color-stop(51%,#dfdfdf),color-stop(100%,#ebebeb));
+        background-image: -webkit-linear-gradient(top,#ededed,#ebebeb 50%,#dfdfdf 51%,#ebebeb);
+        background-image: -moz-linear-gradient(top,#ededed,#ebebeb 50%,#dfdfdf 51%,#ebebeb);
+        background-image: -o-linear-gradient(top,#ededed,#ebebeb 50%,#dfdfdf 51%,#ebebeb);
+        background-image: linear-gradient(top,#ededed,#ebebeb 50%,#dfdfdf 51%,#ebebeb)
+    }
+
+    .toolbar-paging .icon {
+        width: 16px;
+        height: 16px;
+        background-repeat: no-repeat;
+        padding:0px;
+    }
+
+        .toolbar-paging .icon.page-first {
+            background-image: url('/content/images/grid/page-first.png') !important;
+        }
+
+        .toolbar-paging .icon.page-last {
+            background-image: url('/content/images/grid/page-last.png');
+        }
+
+        .toolbar-paging .icon.page-next {
+            background-image: url('/content/images/grid/page-next.png');
+        }
+
+        .toolbar-paging .icon.page-prev {
+            background-image: url('/content/images/grid/page-prev.png');
+        }
+
+        .toolbar-paging .icon.page-refresh {
+            background-image: url('/content/images/grid/refresh.png');
+        }
+
+    .toolbar-paging .triggerWrap {
+        position: relative;
+        display: flex;
+        min-width: 60px;
+        background-color: #f2f2f2;
+        border-width: 1px;
+        border-style: solid;
+        line-height: 17px;
+        border-color: #c1c1c1 #d9d9d9 #d9d9d9;
+    }
+
+        .toolbar-paging .triggerWrap button {
+            position: absolute;
+            right: 0;
+            width: 22px;
+            height: 22px;
+            border-radius: unset;
+        }
+
+        .toolbar-paging .triggerWrap:focus-within {
+            border-color: #c1c1c1 #d9d9d9 #d9d9d9;
+        }
+
+    .toolbar-paging .trigger-bountlist-box {
+        min-width: 60px;
+        top: -69px !important;
+    }
+    /*Hiển thị thông tin tổng số bản ghi*/
+    .toolbar-paging .toolbar-paging-right {
+        position: absolute;
+        right: 0;
+        align-self: center;
+        padding-right: 8px;
+    }

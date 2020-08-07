@@ -26,7 +26,18 @@ namespace MISA.CukCuk.Controllers
         {
             return await _context.ViewEmployee.ToListAsync();
         }
-
+        
+        /// <summary>
+        /// Phân trang dữ liệu
+        /// </summary>
+        /// <param name="skip"></param>
+        /// <param name="take"></param>
+        /// <returns></returns>
+        [HttpGet("paging")]
+        public async Task<ActionResult<IEnumerable<ViewEmployee>>> GetEmployee([FromQuery] int skip, [FromQuery] int take)
+        {
+            return await _context.ViewEmployee.Skip(skip).Take(take).ToListAsync();
+        }
         // GET: api/Employees/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Employee>> GetEmployee(Guid id)

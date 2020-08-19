@@ -102,3 +102,10 @@ th {
     table tbody tr.row-selected {
         background-color: #a4befc;
     }
+
+    .bg-red{background-color:red}
+
+
+#btnAdd{
+    border:2px solid #000 !important;
+}
